@@ -1,6 +1,5 @@
 import pandas as pd
 import tkinter as tk
-import os
 from tkinter import filedialog
 import tkinter.font as tkFont
 import ttkbootstrap as btk
@@ -13,18 +12,17 @@ class ThermalShockTests:
     def __init__(self, root, option):
         self.root = root
         if option == 0:
-            self.Combined()
+            self.combined()
 
-    def Combined(self):
+    def combined(self):
         # Thermal Shocks data processing:
         filepaths = filedialog.askopenfilenames(
             parent=self.root,
             filetypes=(("all files", ".*"),),
-            initialdir=os.getcwd()
         )
-        filepaths2 = list(filepaths)
-        listData = []
-        for filepath in filepaths2:
+        filepaths = list(filepaths)
+        list_data = []
+        for filepath in filepaths:
             try:
                 if filepath.endswith(".csv"):
                     self.data = pd.read_csv(
@@ -37,7 +35,7 @@ class ThermalShockTests:
                             if i.startswith("A:Temper")
                         }
                     )
-                    newColumnNames = {
+                    new_column_names = {
                         "Date and time       ": "Date and Time",
                         "Temp hot": "Temperature Hot Set",
                         "Temp hot.1": "Temperature Hot",
@@ -52,7 +50,7 @@ class ThermalShockTests:
                         "Lift up   ": "Basket Position",
                         "Basket up ": "Basket Position",
                     }
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data.drop(
                         self.data.index[
                             [
@@ -71,11 +69,11 @@ class ThermalShockTests:
                         low_memory=False,
                         encoding_errors="ignore",
                     )
-                    newColumnNames = {"Unnamed: 0": "Date and Time"}
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    new_column_names = {"Unnamed: 0": "Date and Time"}
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data.drop(self.data.index[[0]], axis=0, inplace=True)
                     self.data = pd.DataFrame(self.data)
-                    newColumnNames = {
+                    new_column_names = {
                         "A:Komora gorac": "Temperature Hot",
                         "N:Komora gorac": "Temperature Hot Set",
                         "A:Komora zimna": "Temperature Cold",
@@ -89,7 +87,7 @@ class ThermalShockTests:
                         "Basket Up/Down": "Basket Position",
                         "Lift Up  ": "Basket Position",
                     }
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data = self.data.rename(
                         columns={
                             i: "Temperature Hot"
@@ -136,7 +134,7 @@ class ThermalShockTests:
                     ],
                     axis=1,
                 )
-                listData.append(self.data)
+                list_data.append(self.data)
             except ValueError:
                 return Message(
                     "error",
@@ -146,9 +144,9 @@ class ThermalShockTests:
                 )
 
         try:
-            self.data = pd.concat(listData, axis=0, ignore_index=False)
+            self.data = pd.concat(list_data, axis=0, ignore_index=False)
             self.data = self.data.sort_values(by="Date and Time", ascending=True)
-            optionTest = {
+            option_test = {
                 "dewing": 0,
                 "secasi": False,
                 "angel": False,
@@ -168,7 +166,7 @@ class ThermalShockTests:
                 "saltHum": False,
                 "hum": False,
             }
-            self.TestType(optionTest, "ThermalShock")
+            self.TestType(option_test, "ThermalShock")
         except:
             return Message(
                 "error",
@@ -176,7 +174,7 @@ class ThermalShockTests:
                 0,
             )
 
-    def TestType(self, optionTest, name):
+    def TestType(self, option_test, name):
         try:
             self.data["Temperature Hot"] = self.data["Temperature Hot"].str.replace(
                 ",", ".", regex=True
@@ -218,78 +216,78 @@ class ThermalShockTests:
             pass
         try:
             # Data processing variants - popup:
-            popupWin1 = tk.Toplevel(self.root)
+            popup_win_1 = tk.Toplevel(self.root)
             width = 325
             height = 148
-            screenwidth = popupWin1.winfo_screenwidth()
-            screenheight = popupWin1.winfo_screenheight()
+            screenwidth = popup_win_1.winfo_screenwidth()
+            screenheight = popup_win_1.winfo_screenheight()
             alignstr = "%dx%d+%d+%d" % (
                 width,
                 height,
                 (screenwidth - width) / 2,
                 (screenheight - height) / 2,
             )
-            popupWin1.geometry(alignstr)
-            popupWin1.resizable(width=False, height=False)
-            popupWin1.attributes("-topmost", True)
-            popupWin1.minsize(325, 148)
-            popupWin1.maxsize(325, 148)
+            popup_win_1.geometry(alignstr)
+            popup_win_1.resizable(width=False, height=False)
+            popup_win_1.attributes("-topmost", True)
+            popup_win_1.minsize(325, 148)
+            popup_win_1.maxsize(325, 148)
 
-            buttonTemperature = btk.Button(
-                popupWin1,
+            button_temperature = btk.Button(
+                popup_win_1,
                 text="Temperature",
                 command=lambda: [
-                    popupWin1.destroy(),
-                    Temperature(self, self.data, optionTest, name),
+                    popup_win_1.destroy(),
+                    temperature(self, self.data, option_test, name),
                 ],
                 bootstyle=DARK,
             )
-            buttonTemperature.place(x=15, y=50, width=92, height=30)
+            button_temperature.place(x=15, y=50, width=92, height=30)
 
-            buttonHumidity = btk.Button(
-                popupWin1,
+            button_basket_position = btk.Button(
+                popup_win_1,
                 text="Basket Pos.",
                 command=lambda: [
-                    popupWin1.destroy(),
-                    BasketPosition(self, self.data, optionTest, name),
+                    popup_win_1.destroy(),
+                    basket_position(self, self.data, option_test, name),
                 ],
                 bootstyle=DARK,
             )
-            buttonHumidity.place(x=115, y=50, width=92, height=30)
+            button_basket_position.place(x=115, y=50, width=92, height=30)
 
-            buttonDewing = btk.Button(
-                popupWin1,
+            button_basket = btk.Button(
+                popup_win_1,
                 text="Basket Temp.",
                 command=lambda: [
-                    popupWin1.destroy(),
-                    Basket(self, self.data, optionTest, name),
+                    popup_win_1.destroy(),
+                    basket(self, self.data, option_test, name),
                 ],
                 bootstyle=DARK,
             )
-            buttonDewing.place(x=215, y=50, width=92, height=30)
+            button_basket.place(x=215, y=50, width=92, height=30)
 
-            labelData = tk.Label(popupWin1)
-            labelData["anchor"] = "n"
+            label_data = tk.Label(popup_win_1)
+            label_data["anchor"] = "n"
             ft = tkFont.Font(family="Helvetica", size=15)
-            labelData["font"] = ft
-            labelData["fg"] = "#333333"
-            labelData["justify"] = "center"
-            labelData["text"] = "Data type"
-            labelData.place(x=20, y=10, width=280, height=36)
+            label_data["font"] = ft
+            label_data["fg"] = "#333333"
+            label_data["justify"] = "center"
+            label_data["text"] = "Data type"
+            label_data.place(x=20, y=10, width=280, height=36)
 
-            buttonQuit = btk.Button(
-                popupWin1,
+            button_close = btk.Button(
+                popup_win_1,
                 text="Close",
                 command=lambda: [
-                    popupWin1.destroy(),
+                    popup_win_1.destroy(),
                 ],
                 bootstyle=DANGER,
             )
-            buttonQuit.place(x=115, y=100, width=92, height=30)
+            button_close.place(x=115, y=100, width=92, height=30)
         except:
-            popupWin1.destroy()
+            popup_win_1.destroy()
 
-        def Temperature(self, data, optionTest, name):
+        def temperature(self, data, option_test, name):
             # Thermal Shock chamber temperature only.
             data2 = data.filter(
                 [
@@ -301,9 +299,9 @@ class ThermalShockTests:
                 ],
                 axis=1,
             )
-            DataFormating(self.root, data2, optionTest, name)
+            DataFormating(self.root, data2, option_test, name)
 
-        def BasketPosition(self, data, optionTest, name):
+        def basket_position(self, data, option_test, name):
             # Thermal Shock chamber temperature with basket position digital output.
             data = data.filter(
                 [
@@ -317,9 +315,9 @@ class ThermalShockTests:
                 axis=1,
             )
             data2 = pd.DataFrame(data)
-            DataFormating(self.root, data2, optionTest, name)
+            DataFormating(self.root, data2, option_test, name)
 
-        def Basket(self, data, optionTest, name):
+        def basket(self, data, option_test, name):
             # Thermal Shock chamber temperature with basket position digital output and basket temperature.
             data = data.filter(
                 [
@@ -334,4 +332,4 @@ class ThermalShockTests:
                 axis=1,
             )
             data2 = pd.DataFrame(data)
-            DataFormating(self.root, data2, optionTest, name)
+            DataFormating(self.root, data2, option_test, name)

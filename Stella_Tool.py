@@ -13,7 +13,7 @@ from stella.__main__ import App
 
 if __name__ == "__main__":
     root = tk.Tk()
-    img = tk.PhotoImage(data=ConfigInformations.iconPath)
+    img = tk.PhotoImage(data=ConfigInformations.icon_path)
     root.iconphoto(False, img)
     app = App(root)
     root.mainloop()

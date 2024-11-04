@@ -1,6 +1,5 @@
 import pandas as pd
 import tkinter as tk
-import os
 from tkinter import filedialog
 import tkinter.font as tkFont
 import ttkbootstrap as btk
@@ -13,11 +12,11 @@ class OtherTests:
     def __init__(self, root, option):
         self.root = root
         if option == 0:
-            self.ReadSalt()
+            self.read_salt()
         elif option == 1:
-            self.ReadZUTMichalin()
+            self.read_zut_michalin()
 
-    def ReadSalt(self):
+    def read_salt(self):
         # Salt data processing:
         filepaths = filedialog.askopenfilenames(
             parent=self.root,
@@ -25,11 +24,10 @@ class OtherTests:
                 ("SIMPATI files", "*.x*"),
                 ("all files", ".*"),
             ),
-            initialdir=os.getcwd(),
         )
-        filepaths2 = list(filepaths)
-        listData = []
-        for filepath in filepaths2:
+        filepaths = list(filepaths)
+        list_data = []
+        for filepath in filepaths:
             try:
                 self.data = pd.read_csv(
                     filepath,
@@ -38,8 +36,8 @@ class OtherTests:
                     low_memory=False,
                     encoding_errors="ignore",
                 )
-                newColumnNames = {"Unnamed: 0": "Date and Time"}
-                self.data.rename(columns=newColumnNames, inplace=True)
+                new_column_names = {"Unnamed: 0": "Date and Time"}
+                self.data.rename(columns=new_column_names, inplace=True)
                 self.data.drop(self.data.index[[0]], axis=0, inplace=True)
                 self.data = pd.DataFrame(self.data)
                 self.data = self.data.rename(
@@ -56,7 +54,7 @@ class OtherTests:
                         if i.startswith("N:Temperat")
                     }
                 )
-                newColumnNames = {
+                new_column_names = {
                     "N:Humidifier  ": "Humidifier Set",
                     "A:Humidifier  ": "Humidifier",
                     "N:Temp.Humidif": "Humidifier Set",
@@ -64,7 +62,7 @@ class OtherTests:
                     "N:Humidity    ": "Humidity Set",
                     "A:Humidity    ": "Humidity",
                 }
-                self.data.rename(columns=newColumnNames, inplace=True)
+                self.data.rename(columns=new_column_names, inplace=True)
                 self.data["Temperature"] = self.data["Temperature"].str.replace(
                     ",", ".", regex=True
                 )
@@ -101,16 +99,15 @@ class OtherTests:
                 self.data["Humidifier"] = pd.to_numeric(
                     self.data["Humidifier"], errors="coerce"
                 )
-                listData.append(self.data)
+                list_data.append(self.data)
             except:
                 return (
                     "error",
-                    "Wrong file format."
-                    "\nPlease contact with: piotr.klys92@gmail.com",
+                    "Wrong file format." "\nPlease contact with: piotr.klys92@gmail.com",
                     0,
                 )
         try:
-            self.data = pd.concat(listData, axis=0, ignore_index=False)
+            self.data = pd.concat(list_data, axis=0, ignore_index=False)
             self.data = self.data.sort_values(by="Date and Time", ascending=True)
         except:
             return (
@@ -120,62 +117,62 @@ class OtherTests:
             )
         try:
             # Data processing variants - popup:
-            popupWin1 = tk.Toplevel(self.root)
+            popup_win_1 = tk.Toplevel(self.root)
             width = 233
             height = 147
-            screenwidth = popupWin1.winfo_screenwidth()
-            screenheight = popupWin1.winfo_screenheight()
+            screenwidth = popup_win_1.winfo_screenwidth()
+            screenheight = popup_win_1.winfo_screenheight()
             alignstr = "%dx%d+%d+%d" % (
                 width,
                 height,
                 (screenwidth - width) / 2,
                 (screenheight - height) / 2,
             )
-            popupWin1.geometry(alignstr)
-            popupWin1.resizable(width=False, height=False)
-            popupWin1.attributes("-topmost", True)
-            popupWin1.minsize(233, 147)
-            popupWin1.maxsize(233, 147)
+            popup_win_1.geometry(alignstr)
+            popup_win_1.resizable(width=False, height=False)
+            popup_win_1.attributes("-topmost", True)
+            popup_win_1.minsize(233, 147)
+            popup_win_1.maxsize(233, 147)
 
-            buttonTemperature = btk.Button(
-                popupWin1,
+            button_salt = btk.Button(
+                popup_win_1,
                 text="Salt test",
-                command=lambda: [popupWin1.destroy(), saltTest(self)],
+                command=lambda: [popup_win_1.destroy(), salt_test(self)],
                 bootstyle=DARK,
             )
-            buttonTemperature.place(x=10, y=50, width=102, height=30)
+            button_salt.place(x=10, y=50, width=102, height=30)
 
-            buttonHumidity = btk.Button(
-                popupWin1,
+            button_salt_humidity = btk.Button(
+                popup_win_1,
                 text="Salt Humidity",
-                command=lambda: [popupWin1.destroy(), humidityTest(self)],
+                command=lambda: [popup_win_1.destroy(), salt_humidity_test(self)],
                 bootstyle=DARK,
             )
-            buttonHumidity.place(x=120, y=50, width=102, height=30)
+            button_salt_humidity.place(x=120, y=50, width=102, height=30)
 
-            labelData = tk.Label(popupWin1)
-            labelData["anchor"] = "n"
+            label_data = tk.Label(popup_win_1)
+            label_data["anchor"] = "n"
             ft = tkFont.Font(family="Helvetica", size=15)
-            labelData["font"] = ft
-            labelData["fg"] = "#333333"
-            labelData["justify"] = "center"
-            labelData["text"] = "Data type"
-            labelData.place(x=25, y=10, width=182, height=37)
+            label_data["font"] = ft
+            label_data["fg"] = "#333333"
+            label_data["justify"] = "center"
+            label_data["text"] = "Data type"
+            label_data.place(x=25, y=10, width=182, height=37)
 
-            buttonQuit = btk.Button(
-                popupWin1,
+            button_quit = btk.Button(
+                popup_win_1,
                 text="Close",
                 command=lambda: [
-                    popupWin1.destroy(),
+                    popup_win_1.destroy(),
                 ],
                 bootstyle=DANGER,
             )
-            buttonQuit.place(x=70, y=100, width=92, height=30)
+            button_quit.place(x=70, y=100, width=92, height=30)
         except:
-            popupWin1.destroy()
+            popup_win_1.destroy()
 
-        def saltTest(self):
-            ##Salt test.
+        def salt_test(self):
+            # Salt test.
             data2 = self.data.filter(
                 [
                     "Date and Time",
@@ -186,7 +183,7 @@ class OtherTests:
                 ],
                 axis=1,
             )
-            optionTest = {
+            option_test = {
                 "dewing": 0,
                 "secasi": False,
                 "angel": False,
@@ -206,9 +203,9 @@ class OtherTests:
                 "saltHum": False,
                 "hum": False,
             }
-            DataFormating(self.root, data2, optionTest, "Salt")
+            DataFormating(self.root, data2, option_test, "Salt")
 
-        def humidityTest(self):
+        def salt_humidity_test(self):
             # Salt with humidity.
             try:
                 data2 = self.data.filter(
@@ -227,7 +224,7 @@ class OtherTests:
                     data2["Humidity Set"], errors="coerce"
                 )
                 data2["Humidity"] = pd.to_numeric(data2["Humidity"], errors="coerce")
-                optionTest = {
+                option_test = {
                     "dewing": 0,
                     "secasi": False,
                     "angel": False,
@@ -247,7 +244,7 @@ class OtherTests:
                     "saltHum": True,
                     "hum": True,
                 }
-                DataFormating(self.root, data2, optionTest, "Salt")
+                DataFormating(self.root, data2, option_test, "Salt")
 
             except KeyError:
                 return Message(
@@ -256,60 +253,60 @@ class OtherTests:
                     0,
                 )
 
-    def ReadZUTMichalin(self):
+    def read_zut_michalin(self):
         # GasCorrosion data processing:
         try:
             # Data processing variants - popup:
-            popupWin1 = tk.Toplevel(self.root)
+            popup_win_1 = tk.Toplevel(self.root)
             width = 490
             height = 148
-            screenwidth = popupWin1.winfo_screenwidth()
-            screenheight = popupWin1.winfo_screenheight()
+            screenwidth = popup_win_1.winfo_screenwidth()
+            screenheight = popup_win_1.winfo_screenheight()
             alignstr = "%dx%d+%d+%d" % (
                 width,
                 height,
                 (screenwidth - width) / 2,
                 (screenheight - height) / 2,
             )
-            popupWin1.geometry(alignstr)
-            popupWin1.resizable(width=False, height=False)
-            popupWin1.attributes("-topmost", True)
-            popupWin1.minsize(490, 148)
-            popupWin1.maxsize(490, 148)
+            popup_win_1.geometry(alignstr)
+            popup_win_1.resizable(width=False, height=False)
+            popup_win_1.attributes("-topmost", True)
+            popup_win_1.minsize(490, 148)
+            popup_win_1.maxsize(490, 148)
 
             GButton_51 = btk.Button(
-                popupWin1,
+                popup_win_1,
                 text="Gas Corrosion",
-                command=lambda: [popupWin1.destroy(), GasChamber(self)],
+                command=lambda: [popup_win_1.destroy(), gas_chamber(self)],
                 bootstyle=DARK,
             )
             GButton_51.place(x=10, y=50, width=110, height=30)
 
             GButton_89 = btk.Button(
-                popupWin1,
+                popup_win_1,
                 text="Splash Chamber",
-                command=lambda: [popupWin1.destroy(), SplashChamber(self)],
+                command=lambda: [popup_win_1.destroy(), splash_chamber(self)],
                 bootstyle=DARK,
             )
             GButton_89.place(x=130, y=50, width=110, height=30)
 
             GButton_991 = btk.Button(
-                popupWin1,
+                popup_win_1,
                 text="Solar Chamber",
-                command=lambda: [popupWin1.destroy(), SolarChamber(self)],
+                command=lambda: [popup_win_1.destroy(), solar_chamber(self)],
                 bootstyle=DARK,
             )
             GButton_991.place(x=250, y=50, width=110, height=30)
 
             GButton_581 = btk.Button(
-                popupWin1,
+                popup_win_1,
                 text="Cooling System",
-                command=lambda: [popupWin1.destroy(), CoolingSystem(self)],
+                command=lambda: [popup_win_1.destroy(), cooling_system(self)],
                 bootstyle=DARK,
             )
             GButton_581.place(x=370, y=50, width=110, height=30)
 
-            GLabel_861 = tk.Label(popupWin1)
+            GLabel_861 = tk.Label(popup_win_1)
             ft = tkFont.Font(family="Helvetica", size=15)
             GLabel_861["font"] = ft
             GLabel_861["fg"] = "#333333"
@@ -318,18 +315,18 @@ class OtherTests:
             GLabel_861.place(x=190, y=10, width=110, height=25)
 
             GButton_728 = btk.Button(
-                popupWin1,
+                popup_win_1,
                 text="Close",
                 command=lambda: [
-                    popupWin1.destroy(),
+                    popup_win_1.destroy(),
                 ],
                 bootstyle=DANGER,
             )
             GButton_728.place(x=190, y=100, width=110, height=30)
         except:
-            popupWin1.destroy()
+            popup_win_1.destroy()
 
-        def GasChamber(self):
+        def gas_chamber(self):
             # GasChamber data processing:
             filepaths = filedialog.askopenfilenames(
                 parent=self.root,
@@ -337,13 +334,12 @@ class OtherTests:
                     ("CSV Files", "*.csv"),
                     ("all files", ".*"),
                 ),
-                initialdir=os.getcwd(),
             )
-            filepaths2 = list(filepaths)
+            filepaths = list(filepaths)
 
             # Multiple data function:
-            listData = []
-            for filepath in filepaths2:
+            list_data = []
+            for filepath in filepaths:
                 try:
                     self.data = pd.read_csv(
                         filepath, sep=",", low_memory=False, encoding_errors="ignore"
@@ -358,7 +354,7 @@ class OtherTests:
                     self.data["Date and Time"] = pd.to_datetime(
                         self.data["Date and Time"], errors="coerce"
                     )
-                    newColumnNames = {
+                    new_column_names = {
                         "Temp set": "Temperature Set",
                         "Temp act": "Temperature IN",
                         "Humi set": "Humidity Set",
@@ -366,7 +362,7 @@ class OtherTests:
                         "Humi out act": "Humidity OUT",
                         "Temp out act": "Temperature OUT",
                     }
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data["Temperature Set"] = pd.to_numeric(
                         self.data["Temperature Set"], errors="coerce"
                     )
@@ -385,7 +381,7 @@ class OtherTests:
                     self.data["Humidity OUT"] = pd.to_numeric(
                         self.data["Humidity OUT"], errors="coerce"
                     )
-                    listData.append(self.data)
+                    list_data.append(self.data)
                 except:
                     return Message(
                         "error",
@@ -395,7 +391,7 @@ class OtherTests:
                     )
 
             try:
-                self.data = pd.concat(listData, axis=0, ignore_index=False)
+                self.data = pd.concat(list_data, axis=0, ignore_index=False)
             except:
                 return Message("warning", "File was not selected", 0)
 
@@ -412,7 +408,7 @@ class OtherTests:
                 ],
                 axis=1,
             )
-            optionTest = {
+            option_test = {
                 "dewing": 0,
                 "secasi": False,
                 "angel": False,
@@ -432,9 +428,9 @@ class OtherTests:
                 "saltHum": False,
                 "hum": True,
             }
-            DataFormating(self.root, data2, optionTest, "GasChamber")
+            DataFormating(self.root, data2, option_test, "GasChamber")
 
-        def SplashChamber(self):
+        def splash_chamber(self):
             # Splash data processing:
             filepaths = filedialog.askopenfilenames(
                 parent=self.root,
@@ -442,13 +438,12 @@ class OtherTests:
                     ("CSV Files", "*.csv"),
                     ("all files", ".*"),
                 ),
-                initialdir=os.getcwd(),
             )
-            filepaths2 = list(filepaths)
+            filepaths = list(filepaths)
 
             # Multiple data function:
-            listData = []
-            for filepath in filepaths2:
+            list_data = []
+            for filepath in filepaths:
                 try:
                     self.data = pd.read_csv(
                         filepath, sep=",", low_memory=False, encoding_errors="ignore"
@@ -463,14 +458,14 @@ class OtherTests:
                     self.data["Date and Time"] = pd.to_datetime(
                         self.data["Date and Time"], errors="coerce"
                     )
-                    newColumnNames = {
+                    new_column_names = {
                         "Chamber set": "Temperature Set",
                         "Chamber act": "Temperature",
                         "Bath set": "Bath Temp Set",
                         "Bath act": "Bath Temp",
                         "on/off (1/0)": "On/Off",
                     }
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data["Temperature Set"] = pd.to_numeric(
                         self.data["Temperature Set"], errors="coerce"
                     )
@@ -486,7 +481,7 @@ class OtherTests:
                     self.data["On/Off"] = pd.to_numeric(
                         self.data["On/Off"], errors="coerce"
                     )
-                    listData.append(self.data)
+                    list_data.append(self.data)
                 except:
                     return Message(
                         "error",
@@ -495,7 +490,7 @@ class OtherTests:
                         0,
                     )
             try:
-                self.data = pd.concat(listData, axis=0, ignore_index=False)
+                self.data = pd.concat(list_data, axis=0, ignore_index=False)
             except:
                 return Message("warning", "File was not selected", 0)
 
@@ -511,7 +506,7 @@ class OtherTests:
                 ],
                 axis=1,
             )
-            optionTest = {
+            option_test = {
                 "dewing": 0,
                 "secasi": False,
                 "angel": False,
@@ -531,9 +526,9 @@ class OtherTests:
                 "saltHum": False,
                 "hum": False,
             }
-            DataFormating(self.root, data2, optionTest, "SplashChamber")
+            DataFormating(self.root, data2, option_test, "SplashChamber")
 
-        def SolarChamber(self):
+        def solar_chamber(self):
             # Solar data processing:
             filepaths = filedialog.askopenfilenames(
                 parent=self.root,
@@ -541,13 +536,12 @@ class OtherTests:
                     ("CSV Files", "*.csv"),
                     ("all files", ".*"),
                 ),
-                initialdir=os.getcwd(),
             )
-            filepaths2 = list(filepaths)
+            filepaths = list(filepaths)
 
             # Multiple data function:
-            listData = []
-            for filepath in filepaths2:
+            list_data = []
+            for filepath in filepaths:
                 try:
                     self.data = pd.read_csv(
                         filepath, sep=",", low_memory=False, encoding_errors="ignore"
@@ -562,13 +556,13 @@ class OtherTests:
                     self.data["Date and Time"] = pd.to_datetime(
                         self.data["Date and Time"], errors="coerce"
                     )
-                    newColumnNames = {
+                    new_column_names = {
                         "Temp set": "Temperature Set",
                         "Temp act": "Temperature",
                         "Humi set": "Humidity Set",
                         "Humi act": "Humidity",
                     }
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data["Temperature Set"] = pd.to_numeric(
                         self.data["Temperature Set"], errors="coerce"
                     )
@@ -585,7 +579,7 @@ class OtherTests:
                     self.data["On/Off"] = pd.to_numeric(
                         self.data["On/Off"], errors="coerce"
                     )
-                    listData.append(self.data)
+                    list_data.append(self.data)
                 except:
                     return Message(
                         "error",
@@ -595,7 +589,7 @@ class OtherTests:
                     )
 
             try:
-                self.data = pd.concat(listData, axis=0, ignore_index=False)
+                self.data = pd.concat(list_data, axis=0, ignore_index=False)
             except:
                 return Message("warning", "File was not selected", 0)
 
@@ -618,7 +612,7 @@ class OtherTests:
                 ],
                 axis=1,
             )
-            optionTest = {
+            option_test = {
                 "dewing": 0,
                 "secasi": False,
                 "angel": False,
@@ -638,22 +632,21 @@ class OtherTests:
                 "saltHum": False,
                 "hum": True,
             }
-            DataFormating(self.root, data2, optionTest, "SolarChamber")
+            DataFormating(self.root, data2, option_test, "SolarChamber")
 
-        def CoolingSystem(self):
+        def cooling_system(self):
             filepaths = filedialog.askopenfilenames(
                 parent=self.root,
                 filetypes=(
                     ("CSV Files", "*.csv"),
                     ("all files", ".*"),
                 ),
-                initialdir=os.getcwd(),
             )
-            filepaths2 = list(filepaths)
+            filepaths = list(filepaths)
 
             # Multiple data function:
-            listData = []
-            for filepath in filepaths2:
+            list_data = []
+            for filepath in filepaths:
                 try:
                     self.data = pd.read_csv(
                         filepath, sep=",", low_memory=False, encoding_errors="ignore"
@@ -668,12 +661,12 @@ class OtherTests:
                     self.data["Date and Time"] = pd.to_datetime(
                         self.data["Date and Time"], errors="coerce"
                     )
-                    newColumnNames = {
+                    new_column_names = {
                         "Temp IN": "Temperature In",
                         "Temp OUT": "Temperature Out",
                         "Temp Cham": "Temperature Chamber",
                     }
-                    self.data.rename(columns=newColumnNames, inplace=True)
+                    self.data.rename(columns=new_column_names, inplace=True)
                     self.data["Temperature In"] = pd.to_numeric(
                         self.data["Temperature In"], errors="coerce"
                     )
@@ -689,7 +682,7 @@ class OtherTests:
                     self.data["Flow"] = pd.to_numeric(
                         self.data["Flow"], errors="coerce"
                     )
-                    listData.append(self.data)
+                    list_data.append(self.data)
                 except:
                     return Message(
                         "error",
@@ -699,7 +692,7 @@ class OtherTests:
                     )
 
             try:
-                self.data = pd.concat(listData, axis=0, ignore_index=False)
+                self.data = pd.concat(list_data, axis=0, ignore_index=False)
             except:
                 return Message("warning", "File was not selected", 0)
 
@@ -716,7 +709,7 @@ class OtherTests:
                 ],
                 axis=1,
             )
-            optionTest = {
+            option_test = {
                 "dewing": 0,
                 "secasi": False,
                 "angel": False,
@@ -736,4 +729,4 @@ class OtherTests:
                 "saltHum": False,
                 "hum": False,
             }
-            DataFormating(self.root, data2, optionTest, "CoolingSystem")
+            DataFormating(self.root, data2, option_test, "CoolingSystem")

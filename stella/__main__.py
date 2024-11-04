@@ -16,9 +16,9 @@ from .loggers.loggers import Loggers
 class App:
     def __init__(self, root):
         # Current version with additional update informations:
-        currentVersion = ConfigInformations.currentVersion
-        currentLocation = os.getcwd()
-        link = os.path.join(currentLocation, ConfigInformations.link)
+        current_version = ConfigInformations.current_version
+        current_location = os.getcwd()
+        link = os.path.join(current_location, ConfigInformations.link)
 
         # Main GUI:
         root.title("Data Processing Tool")
@@ -39,172 +39,173 @@ class App:
         file = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="File", menu=file)
         file.add_command(
-            label="Update", command=lambda: self.CheckUpdate(currentVersion, link, root)
+            label="Update",
+            command=lambda: self.check_update(current_version, link, root),
         )
         file.add_separator()
         file.add_command(label="Exit", command=root.destroy)
         root.config(menu=menubar)
 
         # Main GUI buttons:
-        buttonCombinedClimatic = btk.Button(
+        button_combined_climatic = btk.Button(
             root,
             text="Chamber",
             command=lambda: [ClimaticTests(root, 0)],
             bootstyle=DARK,
         )
-        buttonCombinedClimatic.place(x=50, y=40, width=92, height=30)
+        button_combined_climatic.place(x=50, y=40, width=92, height=30)
 
-        buttonCombinedTS = btk.Button(
+        button_combined_ts = btk.Button(
             root,
             text="TS Chamber",
             command=lambda: [ThermalShockTests(root, 0)],
             bootstyle=DARK,
         )
-        buttonCombinedTS.place(x=170, y=40, width=92, height=30)
+        button_combined_ts.place(x=170, y=40, width=92, height=30)
 
-        buttonSalt = btk.Button(
+        button_salt = btk.Button(
             root,
             text="Salt Chamber",
             command=lambda: [OtherTests(root, 0)],
             bootstyle=DARK,
         )
-        buttonSalt.place(x=40, y=110, width=102, height=30)
+        button_salt.place(x=40, y=110, width=102, height=30)
 
-        buttonSalt = btk.Button(
+        button_specialised = btk.Button(
             root,
             text="Specialized",
             command=lambda: [OtherTests(root, 1)],
             bootstyle=DARK,
         )
-        buttonSalt.place(x=160, y=110, width=102, height=30)
+        button_specialised.place(x=160, y=110, width=102, height=30)
 
-        buttonRotronic = btk.Button(
+        button_rotronic = btk.Button(
             root,
             text="Rotronic",
             command=lambda: [Loggers(root, 0)],
             bootstyle=DARK,
         )
-        buttonRotronic.place(x=10, y=180, width=82, height=30)
+        button_rotronic.place(x=10, y=180, width=82, height=30)
 
-        buttonVaisala = btk.Button(
+        button_vaisala = btk.Button(
             root,
             text="Vaisala",
             command=lambda: [Loggers(root, 1)],
             bootstyle=DARK,
         )
-        buttonVaisala.place(x=110, y=180, width=82, height=30)
+        button_vaisala.place(x=110, y=180, width=82, height=30)
 
-        buttonKeithley = btk.Button(
+        button_keithley = btk.Button(
             root,
             text="Keithley",
             command=lambda: [Loggers(root, 2)],
             bootstyle=DARK,
         )
-        buttonKeithley.place(x=210, y=180, width=82, height=30)
+        button_keithley.place(x=210, y=180, width=82, height=30)
 
-        buttonGrafana = btk.Button(
+        button_grafana = btk.Button(
             root,
             text="Grafana",
             command=lambda: [Loggers(root, 3)],
             bootstyle=DARK,
         )
-        buttonGrafana.place(x=50, y=220, width=82, height=30)
+        button_grafana.place(x=50, y=220, width=82, height=30)
 
-        buttonAgilent = btk.Button(
+        button_agilent = btk.Button(
             root,
             text="Agilent",
             command=lambda: [Loggers(root, 4)],
             bootstyle=DARK,
         )
-        buttonAgilent.place(x=170, y=220, width=82, height=30)
+        button_agilent.place(x=170, y=220, width=82, height=30)
 
         # Main GUI labels:
-        labelChamber = tk.Label(root)
+        label_chamber = tk.Label(root)
         ft = tkFont.Font(family="Helvetica", size=15)
-        labelChamber["font"] = ft
-        labelChamber["fg"] = "#333333"
-        labelChamber["justify"] = "center"
-        labelChamber["text"] = "Chamber Data"
-        labelChamber.place(x=10, y=0, width=282, height=40)
+        label_chamber["font"] = ft
+        label_chamber["fg"] = "#333333"
+        label_chamber["justify"] = "center"
+        label_chamber["text"] = "Chamber Data"
+        label_chamber.place(x=10, y=0, width=282, height=40)
 
-        labelOtherChambers = tk.Label(root)
+        label_other_chambers = tk.Label(root)
         ft = tkFont.Font(family="Helvetica", size=15)
-        labelOtherChambers["font"] = ft
-        labelOtherChambers["fg"] = "#333333"
-        labelOtherChambers["justify"] = "center"
-        labelOtherChambers["text"] = "Other Test Chambers"
-        labelOtherChambers.place(x=10, y=70, width=282, height=40)
+        label_other_chambers["font"] = ft
+        label_other_chambers["fg"] = "#333333"
+        label_other_chambers["justify"] = "center"
+        label_other_chambers["text"] = "Other Test Chambers"
+        label_other_chambers.place(x=10, y=70, width=282, height=40)
 
-        labelLoggers = tk.Label(root)
+        label_loggers = tk.Label(root)
         ft = tkFont.Font(family="Helvetica", size=15)
-        labelLoggers["font"] = ft
-        labelLoggers["fg"] = "#333333"
-        labelLoggers["justify"] = "center"
-        labelLoggers["text"] = "Logger Data"
-        labelLoggers.place(x=10, y=140, width=282, height=40)
+        label_loggers["font"] = ft
+        label_loggers["fg"] = "#333333"
+        label_loggers["justify"] = "center"
+        label_loggers["text"] = "Logger Data"
+        label_loggers.place(x=10, y=140, width=282, height=40)
 
-        creatorMessage = tk.Label(root)
+        creator_message = tk.Label(root)
         ft = tkFont.Font(family="Helvetica", size=10)
-        creatorMessage["font"] = ft
-        creatorMessage["fg"] = "#333333"
-        creatorMessage["justify"] = "right"
-        creatorMessage["text"] = "Stella " + currentVersion + " by PKl"
-        creatorMessage.place(x=10, y=260, width=282, height=20)
+        creator_message["font"] = ft
+        creator_message["fg"] = "#333333"
+        creator_message["justify"] = "right"
+        creator_message["text"] = "Stella " + current_version + " by PKl"
+        creator_message.place(x=10, y=260, width=282, height=20)
 
-    def CheckUpdate(self, currentVersion, link, root):
+    def check_update(self, current_version, link, root):
         # Auto-update
         try:
             update = pd.read_csv(link + "Stella_version.txt")
-            nextVersion = update.iloc[0]["Version"]
+            next_version = update.iloc[0]["Version"]
 
-            if currentVersion < nextVersion:
-                popupWin0 = tk.Toplevel(root)
+            if current_version < next_version:
+                popup_win_0 = tk.Toplevel(root)
                 width = 250
                 height = 100
-                screenwidth = popupWin0.winfo_screenwidth()
-                screenheight = popupWin0.winfo_screenheight()
+                screenwidth = popup_win_0.winfo_screenwidth()
+                screenheight = popup_win_0.winfo_screenheight()
                 alignstr = "%dx%d+%d+%d" % (
                     width,
                     height,
                     (screenwidth - width) / 2,
                     (screenheight - height) / 2,
                 )
-                popupWin0.geometry(alignstr)
-                popupWin0.resizable(width=False, height=False)
-                popupWin0.attributes("-topmost", True)
+                popup_win_0.geometry(alignstr)
+                popup_win_0.resizable(width=False, height=False)
+                popup_win_0.attributes("-topmost", True)
 
-                buttonUpdate = btk.Button(
-                    popupWin0,
+                button_update = btk.Button(
+                    popup_win_0,
                     text="Yes",
-                    command=lambda: [popupWin0.destroy(), UpdateApp(link)],
+                    command=lambda: [popup_win_0.destroy(), update_app(link)],
                     bootstyle=SUCCESS,
                 )
-                buttonUpdate.place(x=30, y=50, width=70, height=30)
+                button_update.place(x=30, y=50, width=70, height=30)
 
-                buttondontUpdate = btk.Button(
-                    popupWin0,
+                button_dont_update = btk.Button(
+                    popup_win_0,
                     text="No",
-                    command=lambda: [popupWin0.destroy(), WithoutUpd()],
+                    command=lambda: [popup_win_0.destroy(), without_upd()],
                     bootstyle=DANGER,
                 )
-                buttondontUpdate.place(x=140, y=50, width=70, height=30)
+                button_dont_update.place(x=140, y=50, width=70, height=30)
 
-                labelUpdate = tk.Label(popupWin0)
+                label_update = tk.Label(popup_win_0)
                 ft = tkFont.Font(family="Helvetica", size=9)
-                labelUpdate["font"] = ft
-                labelUpdate["fg"] = "#333333"
-                labelUpdate["justify"] = "center"
-                labelUpdate["text"] = (
+                label_update["font"] = ft
+                label_update["fg"] = "#333333"
+                label_update["justify"] = "center"
+                label_update["text"] = (
                     "New version is now available: "
-                    + nextVersion
+                    + next_version
                     + "\nDo you want to download it?"
                 )
-                labelUpdate.place(x=20, y=0, width=200, height=40)
+                label_update.place(x=20, y=0, width=200, height=40)
 
-                def UpdateApp(link):
+                def update_app(link):
                     subprocess.call(link + "Stella.bat")
 
-                def WithoutUpd():
+                def without_upd():
                     messagebox.showinfo(
                         title="Update", message="Update me soon, please!"
                     )
